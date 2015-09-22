@@ -101,19 +101,20 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst()) {
                 do {
                     Task newTask = new Task();
-                    newTask.id = cursor.getInt(cursor.getColumnIndex("ID"));
+                    newTask.id = cursor.getLong(cursor.getColumnIndex(KEY_TASK_ID));
                     newTask.title = cursor.getString(cursor.getColumnIndex(KEY_TASK_TITLE));
                     tasks.add(newTask);
                 }while(cursor.moveToNext());
             }
         } catch (Exception e) {
+            e.printStackTrace();
             Log.d(TAG, "Error while trying to get tasks from database");
         } finally {
             if (cursor != null && !cursor.isClosed()) {
                 cursor.close();
             }
         }
-        return null;
+        return tasks;
     }
 
     // Update task
