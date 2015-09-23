@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditItemActivity extends Activity {
 
@@ -48,6 +49,14 @@ public class EditItemActivity extends Activity {
 
         // Pass relevant data back as a result
         EditText editItem = (EditText) findViewById(R.id.editItem);
+        String text = editItem.getText().toString().trim();
+
+        // Pop up a message: Task cannot be empty
+        if (text.equals("")) {
+            Toast.makeText(this, "Task cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         data.putExtra("text", editItem.getText().toString());
         int pos = getIntent().getIntExtra("pos", 0);
         data.putExtra("pos", pos);
