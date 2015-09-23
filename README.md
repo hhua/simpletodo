@@ -28,7 +28,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] Do not create a task if text field is empty
+* [x] Do not create a task if text field is empty
 
 ## Video Walkthrough 
 
