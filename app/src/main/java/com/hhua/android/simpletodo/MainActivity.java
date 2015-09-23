@@ -85,7 +85,11 @@ public class MainActivity extends Activity {
         addItem(task);
         itemsAdapter.add(task);
         etNewItem.setText("");
+
         readItems();
+
+        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        lvItems.setAdapter(itemsAdapter);
     }
 
     private void setupListViewListener(){
@@ -96,8 +100,6 @@ public class MainActivity extends Activity {
                         // delete task from database
                         Task task = items.get(pos);
                         deleteItem(task);
-                        System.out.println("pos " + pos);
-                        System.out.println("size " + items.size());
                         items.remove(pos);
                         itemsAdapter.notifyDataSetChanged();
                         return true;
