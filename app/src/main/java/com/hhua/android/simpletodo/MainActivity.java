@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hhua.android.simpletodo.models.Task;
 
@@ -80,7 +81,14 @@ public class MainActivity extends Activity {
 
     public void onAddItem(View v){
         EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
+        String itemText = etNewItem.getText().toString().trim();
+
+        if (itemText.equals("")) {
+            // Pop up a message: Task cannot be empty
+            Toast.makeText(this, "Task cannot be empty!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Task task = new Task(itemText);
         addItem(task);
         itemsAdapter.add(task);
