@@ -7,12 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hhua.android.simpletodo.adapters.TasksAdapter;
 import com.hhua.android.simpletodo.models.Task;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.List;
 
 public class MainActivity extends Activity {
     List<Task> items;
-    ArrayAdapter<Task> itemsAdapter;
+    TasksAdapter itemsAdapter;
     ListView lvItems;
     // REQUEST_CODE can be any value we like, used to determine the result type later
     private final int REQUEST_CODE = 20;
@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
             items = new ArrayList<Task>();
         }
 
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TasksAdapter(this, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
     }
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 
         readItems();
 
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TasksAdapter(this, items);
         lvItems.setAdapter(itemsAdapter);
     }
 
@@ -120,7 +120,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
                         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                        String text = ((TextView) item).getText().toString();
+                        TextView taskTitle = (TextView) item.findViewById(R.id.taskTitle);
+                        String text = taskTitle.getText().toString();
                         i.putExtra("text", text);
                         i.putExtra("pos", pos);
                         startActivityForResult(i, REQUEST_CODE); // brings up the second activity
@@ -135,26 +136,9 @@ public class MainActivity extends Activity {
     }
 
     private void readItems(){
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//        try{
-//            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
         TasksDatabaseHelper tasksDatabaseHelper = TasksDatabaseHelper.getInstance(this);
         items = tasksDatabaseHelper.getAllTasks();
     }
-
-//    private void writeItems(){
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//        try{
-//            FileUtils.writeLines(todoFile, items);
-//        }catch (IOException e){
-//            e.printStackTrace();
-//        }
-//    }
 
     private void updateItem(Task task){
         TasksDatabaseHelper tasksDatabaseHelper = TasksDatabaseHelper.getInstance(this);
