@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,8 +17,11 @@ public class EditItemActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
         String text = getIntent().getStringExtra("text");
+        String dueDate = getIntent().getStringExtra("dueDate");
         EditText editItem = (EditText) findViewById(R.id.editItem);
+        DatePicker editDueDate = (DatePicker) findViewById(R.id.editDueDate);
         editItem.setText(text);
+        editDueDate.setSpinnersShown(true);
     }
 
     @Override
@@ -50,6 +54,8 @@ public class EditItemActivity extends Activity {
         // Pass relevant data back as a result
         EditText editItem = (EditText) findViewById(R.id.editItem);
         String text = editItem.getText().toString().trim();
+        DatePicker editDueDate = (DatePicker) findViewById(R.id.editDueDate);
+        String dueDate = editDueDate.getDayOfMonth() + "-" + (editDueDate.getMonth() + 1) + "-" + editDueDate.getYear();
 
         // Pop up a message: Task cannot be empty
         if (text.equals("")) {
@@ -60,6 +66,7 @@ public class EditItemActivity extends Activity {
         data.putExtra("text", editItem.getText().toString());
         int pos = getIntent().getIntExtra("pos", 0);
         data.putExtra("pos", pos);
+        data.putExtra("dueDate", dueDate);
 
         setResult(RESULT_OK, data); // set result code and bundle data for response
         // closes the activity and returns to first screen
