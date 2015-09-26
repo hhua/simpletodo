@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     ListView lvItems;
     // REQUEST_CODE can be any value we like, used to determine the result type later
     private final int REQUEST_CODE = 20;
+    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +70,11 @@ public class MainActivity extends Activity {
             // Extract name value from result extras
             String text = data.getExtras().getString("text");
             int pos = data.getExtras().getInt("pos", 0);
+            String dueDate = data.getExtras().getString("dueDate");
             Task task = items.get(pos);
             task.title = text;
+            task.setDueDate(dueDate);
+
             items.set(pos, task);
             itemsAdapter.notifyDataSetChanged();
 
@@ -122,8 +126,11 @@ public class MainActivity extends Activity {
                         Intent i = new Intent(MainActivity.this, EditItemActivity.class);
                         TextView taskTitle = (TextView) item.findViewById(R.id.taskTitle);
                         String text = taskTitle.getText().toString();
+                        TextView taskDueDate = (TextView) item.findViewById(R.id.taskDueDate);
+                        String dueDate = taskDueDate.getText().toString();
                         i.putExtra("text", text);
                         i.putExtra("pos", pos);
+                        i.putExtra("dueDate", dueDate);
                         startActivityForResult(i, REQUEST_CODE); // brings up the second activity
                     }
                 }

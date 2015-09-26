@@ -26,7 +26,7 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
     // Post Table Columns
     private static final String KEY_TASK_ID = "id";
     private static final String KEY_TASK_TITLE = "title";
-    //private static final String KEY_TASK_DUE = "due";
+    private static final String KEY_TASK_DUE_DATE = "due_date";
 
     private static TasksDatabaseHelper sInstance;
     private static final String TAG = "TasksDatabaseHelper";
@@ -54,7 +54,8 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
         String CREATE_TASKS_TABLE = "CREATE TABLE " + TABLE_TASKS +
                 "(" +
                 KEY_TASK_ID + " INTEGER PRIMARY KEY," + // Define a primary key
-                KEY_TASK_TITLE + " TEXT" +
+                KEY_TASK_TITLE + " TEXT," +
+                KEY_TASK_DUE_DATE + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_TASKS_TABLE);
@@ -78,6 +79,10 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
         try {
             ContentValues values = new ContentValues();
             values.put(KEY_TASK_TITLE, task.title);
+
+            if (task.dueDate != null){
+                values.put(KEY_TASK_DUE_DATE, task.getDueDate());
+            }
 
             db.insertOrThrow(TABLE_TASKS, null, values);
             db.setTransactionSuccessful();
@@ -103,6 +108,8 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
                     Task newTask = new Task();
                     newTask.id = cursor.getLong(cursor.getColumnIndex(KEY_TASK_ID));
                     newTask.title = cursor.getString(cursor.getColumnIndex(KEY_TASK_TITLE));
+
+                    newTask.setDueDate(cursor.getString(cursor.getColumnIndex(KEY_TASK_DUE_DATE)));
                     tasks.add(newTask);
                 }while(cursor.moveToNext());
             }
@@ -123,6 +130,10 @@ public class TasksDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_TASK_TITLE, task.title);
+
+        if (task.dueDate != null){
+            values.put(KEY_TASK_DUE_DATE, task.getDueDate());
+        }
 
         return db.update(TABLE_TASKS, values, KEY_TASK_ID + " = ?",
                 new String[] { String.valueOf(task.id) });
