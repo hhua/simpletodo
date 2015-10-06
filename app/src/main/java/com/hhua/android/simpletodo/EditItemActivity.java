@@ -3,6 +3,7 @@ package com.hhua.android.simpletodo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,7 +11,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class EditItemActivity extends Activity {
+    private static final String TAG = "EditItemActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +27,17 @@ public class EditItemActivity extends Activity {
         EditText editItem = (EditText) findViewById(R.id.editItem);
         DatePicker editDueDate = (DatePicker) findViewById(R.id.editDueDate);
         editItem.setText(text);
-        editDueDate.setSpinnersShown(true);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            Calendar cal = Calendar.getInstance();
+
+            Date dueDateInfo = dateFormat.parse(dueDate);
+            cal.setTime(dueDateInfo);
+            editDueDate.updateDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+        }catch (Exception ex) {
+            Log.d(TAG, "Error while parsing due date!");
+        }
     }
 
     @Override
